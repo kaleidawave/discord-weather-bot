@@ -1,0 +1,20 @@
+name: Shuttle deploy
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Add secrets
+        run: |
+          echo 'DISCORD_TOKEN="${{ secrets.DISCORD_KEY }}"' >> Secrets.toml
+          echo 'DISCORD_GUILD_ID="${{ secrets.DISCORD_GUILD_ID }}"' >> Secrets.toml
+          echo 'WEATHER_API_KEY="${{ secrets.WEATHER_API_KEY }}"' >> Secrets.toml
+      - uses: shuttle-hq/deploy-action@main
+        with:
+          deploy-key: ${{ secrets.SHUTTLE_DEPLOY_KEY }}
