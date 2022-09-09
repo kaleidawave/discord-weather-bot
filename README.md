@@ -1,0 +1,1 @@
+A discord bot written in Rust with Serenity, which can return weather forecasts using `/weather`

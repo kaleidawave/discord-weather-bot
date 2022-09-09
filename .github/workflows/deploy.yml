@@ -12,6 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Add secrets
         run: |
+          # Generate Secrets file
           echo 'DISCORD_TOKEN="${{ secrets.DISCORD_KEY }}"' >> Secrets.toml
           echo 'DISCORD_GUILD_ID="${{ secrets.DISCORD_GUILD_ID }}"' >> Secrets.toml
           echo 'WEATHER_API_KEY="${{ secrets.WEATHER_API_KEY }}"' >> Secrets.toml
