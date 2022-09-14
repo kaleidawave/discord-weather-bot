@@ -2,7 +2,7 @@ mod weather;
 use serenity::model::prelude::command::CommandOptionType;
 use weather::get_forecast;
 
-use log::info;
+use log::{error, info};
 use serenity::model::application::interaction::{Interaction, InteractionResponseType};
 use serenity::model::gateway::Ready;
 use serenity::prelude::*;
@@ -50,7 +50,8 @@ pub async fn get_client(
     weather_api_key: &str,
     discord_guild_id: u64,
 ) -> Client {
-    // Set gateway intents, which decides what events the bot will be notified about
+    // Set gateway intents, which decides what events the bot will be notified about.
+    // Here we don't need any intents so empty
     let intents = GatewayIntents::empty();
 
     Client::builder(discord_token, intents)
@@ -92,7 +93,7 @@ impl EventHandler for Bot {
             .await
             .unwrap();
 
-        info!("{:#?}", commands);
+        info!("Registered commands: {:#?}", commands);
     }
 
     async fn interaction_create(&self, ctx: Context, interaction: Interaction) {
@@ -119,7 +120,10 @@ impl EventHandler for Bot {
                         }
                     }
                 }
-                command => unreachable!("Unknown command: {}", command),
+                command => {
+                    error!("Interaction made with unknown command: {}", command);
+                    format!("Unknown command: {}", command)
+                }
             };
 
             let create_interaction_response =
@@ -130,7 +134,7 @@ impl EventHandler for Bot {
                 });
 
             if let Err(why) = create_interaction_response.await {
-                println!("Cannot respond to slash command: {}", why);
+                error!("Cannot respond to slash command: {}", why);
             }
         }
     }

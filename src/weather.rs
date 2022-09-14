@@ -1,3 +1,5 @@
+//! Forecast specific data types and logic for interacting with the [accuweather api](https://accuweather.com)
+
 use std::fmt::Display;
 
 use reqwest::Client;
@@ -48,15 +50,17 @@ impl Display for CouldNotFindLocation {
 
 impl std::error::Error for CouldNotFindLocation {}
 
+/// Returns the forecast for a place using the [accuweather api](https://accuweather.com)
 pub async fn get_forecast(
     place: &str,
     api_key: &str,
     client: &Client,
 ) -> Result<(Location, Forecast), Box<dyn std::error::Error>> {
     const LOCATION_REQUEST: &str = "http://dataservice.accuweather.com/locations/v1/cities/search";
-    const DAY_REQUEST: &str = "http://dataservice.accuweather.com/forecasts/v1/daily/1day/";
-    let url = format!("{}?apikey={}&q={}", LOCATION_REQUEST, api_key, place);
+    const DAILY_FORECAST_REQUEST: &str =
+        "http://dataservice.accuweather.com/forecasts/v1/daily/1day/";
 
+    let url = format!("{}?apikey={}&q={}", LOCATION_REQUEST, api_key, place);
     let request = client.get(url).build().unwrap();
 
     let resp = client
@@ -72,7 +76,10 @@ pub async fn get_forecast(
             place: place.to_owned(),
         })?;
 
-    let url = format!("{}{}?apikey={}", DAY_REQUEST, first_location.key, api_key);
+    let url = format!(
+        "{}{}?apikey={}",
+        DAILY_FORECAST_REQUEST, first_location.key, api_key
+    );
 
     let request = client.get(url).build().unwrap();
     let forecast = client.execute(request).await?.json::<Forecast>().await?;
