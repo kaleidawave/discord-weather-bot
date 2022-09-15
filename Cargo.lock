@@ -2044,8 +2044,6 @@ dependencies = [
 [[package]]
 name = "shuttle-codegen"
 version = "0.5.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "98c1a20c9e3fe14f47db08312f4bc0d9dcb30fdced4fbcc34e9908f5537b0827"
 dependencies = [
  "proc-macro-error",
  "proc-macro2",
@@ -2056,8 +2054,6 @@ dependencies = [
 [[package]]
 name = "shuttle-common"
 version = "0.5.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7388ecb2ccc3cc334799a6d4f2a7c1305f75528bef46b14c0d80b5ef74d9d364"
 dependencies = [
  "anyhow",
  "censor",
@@ -2074,8 +2070,6 @@ dependencies = [
 [[package]]
 name = "shuttle-service"
 version = "0.5.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d4bfaca9561a7cdf1267eefd2ee2d8c344ca274be2ccdb07bfbee33164bc4c3f"
 dependencies = [
  "anyhow",
  "async-std",
