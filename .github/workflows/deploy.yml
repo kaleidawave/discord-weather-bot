@@ -1,7 +1,9 @@
 name: Shuttle deploy
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - "main"
 
 jobs:
   publish:
