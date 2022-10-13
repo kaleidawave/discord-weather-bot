@@ -1,15 +1,14 @@
 mod weather;
-use serenity::model::prelude::command::CommandOptionType;
-use weather::get_forecast;
 
-use log::{error, info};
+use anyhow::Context as _;
 use serenity::model::application::interaction::{Interaction, InteractionResponseType};
 use serenity::model::gateway::Ready;
+use serenity::model::prelude::command::CommandOptionType;
 use serenity::prelude::*;
 use serenity::{async_trait, model::prelude::GuildId};
-use shuttle_service::error::CustomError;
-use shuttle_service::SecretStore;
-use sqlx::PgPool;
+use shuttle_secrets::SecretStore;
+use tracing::{error, info};
+use weather::get_forecast;
 
 struct Bot {
     weather_api_key: String,
@@ -18,22 +17,21 @@ struct Bot {
 }
 
 #[shuttle_service::main]
-async fn serenity(#[shared::Postgres] pool: PgPool) -> shuttle_service::ShuttleSerenity {
-    // Get the discord token set in `Secrets.toml` from the shared Postgres database
-    let discord_token = pool
-        .get_secret("DISCORD_TOKEN")
-        .await
-        .map_err(CustomError::new)?;
+async fn serenity(
+    #[shuttle_secrets::Secrets] secret_store: SecretStore,
+) -> shuttle_service::ShuttleSerenity {
+    // Get the discord token set in `Secrets.toml`
+    let discord_token = secret_store
+        .get("DISCORD_TOKEN")
+        .context("'DISCORD_TOKEN' was not found")?;
 
-    let weather_api_key = pool
-        .get_secret("WEATHER_API_KEY")
-        .await
-        .map_err(CustomError::new)?;
+    let weather_api_key = secret_store
+        .get("WEATHER_API_KEY")
+        .context("'WEATHER_API_KEY' was not found")?;
 
-    let discord_guild_id = pool
-        .get_secret("DISCORD_GUILD_ID")
-        .await
-        .map_err(CustomError::new)?;
+    let discord_guild_id = secret_store
+        .get("DISCORD_GUILD_ID")
+        .context("'DISCORD_GUILD_ID' was not found")?;
 
     let client = get_client(
         &discord_token,

@@ -15,7 +15,7 @@ jobs:
           echo 'DISCORD_TOKEN="${{ secrets.DISCORD_KEY }}"' >> Secrets.toml
           echo 'DISCORD_GUILD_ID="${{ secrets.DISCORD_GUILD_ID }}"' >> Secrets.toml
           echo 'WEATHER_API_KEY="${{ secrets.WEATHER_API_KEY }}"' >> Secrets.toml
-      - uses: kaleidawave/shuttle-deploy-action@patch-1
+      - uses: shuttle-hq/deploy-action@main
         with:
           deploy-key: ${{ secrets.SHUTTLE_DEPLOY_KEY }}
           allow-dirty: true

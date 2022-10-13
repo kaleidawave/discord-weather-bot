@@ -7,6 +7,7 @@ publish = false
 [lib]
 
 [dependencies]
+anyhow = "1.0.62"
 reqwest = { version = "0.11.11", features = ["json"] }
 serde = "1.0.144"
 serenity = { version = "0.11.5", default-features = false, features = [
@@ -15,9 +16,6 @@ serenity = { version = "0.11.5", default-features = false, features = [
     "rustls_backend",
     "model",
 ] }
-shuttle-service = { version = "0.5.2", features = ["secrets", "bot-serenity"] }
-sqlx = { version = "0.6.1", features = [
-    "runtime-tokio-native-tls",
-    "postgres",
-] }
-log = "0.4.17"
+shuttle-secrets = "0.6.0"
+shuttle-service = { version = "0.6.0", features = ["bot-serenity"] }
+tracing = "0.1.35"
